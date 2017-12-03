@@ -1,15 +1,7 @@
 # -*- coding: utf-8 -*-
 import numpy as np
-import wx
-from ihm import MyFrame1
-
-
-def boolean2binary(val):
-	if val is True:
-		out = 1
-	else:
-		out = 0
-	return out
+from imagedrawing import createImage
+from ihm import fenetre
 
 
 class Cell:
@@ -74,24 +66,6 @@ class Board:
 		self.cells = self.newcells					
 
 
-class MaFrame(MyFrame1):
-
-	def __init__(self, parent):
-		MyFrame1.__init__(self, parent)
-
-
-class App(wx.App):
-
-	def __init__(self, parent):
-		wx.App.__init__(self,parent)
-
-	def OnInit(self):
-		frame = MaFrame(None)
-		self.SetTopWindow(frame)
-		frame.Show(True)
-		return True	
-
-
 if __name__ == "__main__":
 
 	# Initialization
@@ -99,16 +73,7 @@ if __name__ == "__main__":
 	board.cells[4][3].alive = True
 	board.cells[4][4].alive = True
 	board.cells[4][5].alive = True
+	board.cells[1][1].alive = True
 
-	# Matrix
-	matrix = []
-	for i in range(0, board.nbr_lin):
-		tmp = []
-		for j in range(0, board.nbr_col):
-			tmp.append(boolean2binary(board.cells[i][j].alive))
-		matrix.append(tmp)
-	print(matrix)
-
-	# Wx show
-	app = App(0)
-	app.MainLoop()
+	createImage(board)
+	fenetre.mainloop()
