@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
+from Tkinter import *
+from PIL import ImageTk, ImageDraw, Image
 import numpy as np
-from imagedrawing import createImage
-from ihm import fenetre
 
 
 class Cell:
@@ -66,14 +66,43 @@ class Board:
 		self.cells = self.newcells					
 
 
+def createImage(board):
+	px = 10*board.nbr_lin
+	py = 10*board.nbr_col
+	size_x = px/board.nbr_lin
+	size_y = py/board.nbr_col
+
+	image = Image.new('RGBA', (px, py), (255, 255, 255, 0))
+	draw = ImageDraw.Draw(image)
+
+	for i in range(1, board.nbr_lin-1):
+		for j in range(1, board.nbr_col-1):
+			if board.cells[i][j].alive is True:
+				draw.rectangle(((size_x*i-5, size_y*j-5),(size_x*i+5, size_y*j+5)), fill="black")
+
+	image.save('image.png')
+
+
 if __name__ == "__main__":
 
-	# Initialization
-	board = Board(10,10)
+	board = Board(10, 10)
 	board.cells[4][3].alive = True
 	board.cells[4][4].alive = True
 	board.cells[4][5].alive = True
-	board.cells[1][1].alive = True
-
 	createImage(board)
+
+	fenetre = Tk()
+
+	img = ImageTk.PhotoImage(Image.open("image.png"))
+	panel = Label(fenetre, image = img)
+	panel.pack(side="bottom", fill="both", expand="yes")
+
+
+	def clickNextStep(board):
+		board.nextStep()
+		createImage(board)
+
+	button_nextStep = Button(fenetre, text=">>", command=clickNextStep(board))
+	button_nextStep.pack()
+
 	fenetre.mainloop()
