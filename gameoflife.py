@@ -78,15 +78,19 @@ def createImage(board):
 	for i in range(1, board.nbr_lin-1):
 		for j in range(1, board.nbr_col-1):
 			if board.cells[i][j].alive is True:
-				draw.rectangle(((size_x*i-5, size_y*j-5),(size_x*i+5, size_y*j+5)), fill="black")
+				draw.rectangle(((size_x*i-4, size_y*j-4),(size_x*i+4, size_y*j+4)), fill="black")
 			else:
-				draw.rectangle(((size_x*i-5, size_y*j-5),(size_x*i+5, size_y*j+5)), fill="white")
+				draw.rectangle(((size_x*i-4, size_y*j-4),(size_x*i+4, size_y*j+4)), fill="white")
 	image.save('image.png')
 
 
 def clickNextStep():
 	board.nextStep()
 	createImage(board)
+	img = ImageTk.PhotoImage(Image.open("image.png"))
+	panel = Label(frame, image = img)
+	panel.pack(side="bottom", fill="both", expand="yes")
+
 
 	
 if __name__ == "__main__":
@@ -105,9 +109,9 @@ if __name__ == "__main__":
 	frame = Frame(master)
 	frame.pack()
 
-	img = ImageTk.PhotoImage(Image.open("image.png"))
-	panel = Label(frame, image = img)
-	panel.pack(side="bottom", fill="both", expand="yes")
+	#img = ImageTk.PhotoImage(Image.open("image.png"))
+	#panel = Label(frame, image = img)
+	#panel.pack(side="bottom", fill="both", expand="yes")
 
 	button_nextStep = Button(frame, text=">>", command=clickNextStep)
 	button_nextStep.pack()
