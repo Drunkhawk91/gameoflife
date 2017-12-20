@@ -3,3 +3,6 @@ gameoflife.pyc
 init.pyc
 rules.pyc
 trace.pyc
+save.pyc
+analysis.pyc
+data

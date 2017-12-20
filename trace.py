@@ -2,7 +2,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
-
+from save import saveState
 
 def trace(board, steps):
 	fig = plt.figure()
@@ -21,6 +21,7 @@ def trace(board, steps):
 	def animate(i):
 		board.countNeigh()
 		board.nextStep()
+		saveState(board, i)
 		x, y = board.vectAlive()
 		line.set_data(x, y)
 		return line,
