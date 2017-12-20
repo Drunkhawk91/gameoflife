@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-from Tkinter import *
-from PIL import ImageTk, ImageDraw, Image
 import numpy as np
+import matplotlib.pyplot as plt
+from matplotlib.animation import FuncAnimation
 
 
 class Cell:
@@ -65,55 +65,48 @@ class Board:
 					self.newcells[i][j].alive = True
 		self.cells = self.newcells					
 
-
-def createImage(board):
-	px = 10*board.nbr_lin
-	py = 10*board.nbr_col
-	size_x = px/board.nbr_lin
-	size_y = py/board.nbr_col
-
-	image = Image.open('./image.png')
-	draw = ImageDraw.Draw(image)
-
-	for i in range(1, board.nbr_lin-1):
-		for j in range(1, board.nbr_col-1):
-			if board.cells[i][j].alive is True:
-				draw.rectangle(((size_x*i-4, size_y*j-4),(size_x*i+4, size_y*j+4)), fill="black")
-			else:
-				draw.rectangle(((size_x*i-4, size_y*j-4),(size_x*i+4, size_y*j+4)), fill="white")
-	image.save('image.png')
-
-
-def clickNextStep():
-	board.nextStep()
-	createImage(board)
-	img = ImageTk.PhotoImage(Image.open("image.png"))
-	panel = Label(frame, image = img)
-	panel.pack(side="bottom", fill="both", expand="yes")
-
-
+	def vectAlive(self):
+		vect_i = [] 
+		vect_j = []
+		for i in range(1, self.nbr_lin-1):
+			for j in range(1, self.nbr_col-1):
+				if self.cells[i][j].alive is True:
+					vect_i.append(i+1)
+					vect_j.append(j+1)
+				else:
+					pass
+		return vect_i, vect_j	
 	
+
 if __name__ == "__main__":
 
 	# Init
 	board = Board(10, 10)
-	board.cells[4][3].alive = True
-	board.cells[4][4].alive = True
-	board.cells[4][5].alive = True
-	createImage(board)
-
-	# Tkinter
-	master = Tk()
-	master.title("Game of Life")
+	board.cells[board.nbr_lin/2-1][board.nbr_col/2-2].alive = True
+	board.cells[board.nbr_lin/2-1][board.nbr_col/2-1].alive = True
+	board.cells[board.nbr_lin/2-1][board.nbr_col/2].alive = True
 	
-	frame = Frame(master)
-	frame.pack()
+	# Steps and animation
+	fig = plt.figure()
+	line, = plt.plot([], [], marker='s', markersize=board.nbr_lin, color='black', linewidth=0) 
+	plt.xlim(0, board.nbr_lin)
+	plt.ylim(0, board.nbr_col)
+	plt.xticks(np.arange(.5, board.nbr_lin+.5, 1.0), size=0)
+	plt.yticks(np.arange(.5, board.nbr_col+.5, 1.0), size=0)
+	plt.grid(True)
+	plt.axes().set_aspect('equal', 'datalim')
 
-	#img = ImageTk.PhotoImage(Image.open("image.png"))
-	#panel = Label(frame, image = img)
-	#panel.pack(side="bottom", fill="both", expand="yes")
+	def init():
+		line.set_data([], [])
+		return line,
 
-	button_nextStep = Button(frame, text=">>", command=clickNextStep)
-	button_nextStep.pack()
+	def animate(i):
+		board.countNeigh()
+		board.nextStep()
+		x, y = board.vectAlive()
+		line.set_data(x, y)
+		return line,
+ 
+	ani = FuncAnimation(fig, animate, init_func=init, frames=10, blit=True, interval=1000, repeat=False)
 
-	master.mainloop()
+	plt.show()
