@@ -72,6 +72,4 @@ class Board:
 				if self.cells[i][j].alive is True:
 					vect_i.append(i+1)
 					vect_j.append(j+1)
-				else:
-					pass
 		return vect_i, vect_j	
