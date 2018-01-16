@@ -35,6 +35,7 @@ class Board:
 				if self.cells[i-1][j].alive is True:
 					self.cells[i][j].nbr_neigh += 1
 				if self.cells[i-1][j+1].alive is True:
+					
 					self.cells[i][j].nbr_neigh += 1
 				if self.cells[i][j-1].alive is True:
 					self.cells[i][j].nbr_neigh += 1
@@ -72,4 +73,4 @@ class Board:
 				if self.cells[i][j].alive is True:
 					vect_i.append(i+1)
 					vect_j.append(j+1)
-		return vect_i, vect_j	
+		return vect_i, vect_j

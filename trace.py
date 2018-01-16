@@ -21,7 +21,7 @@ def trace(board, steps):
 	def animate(i):
 		board.countNeigh()
 		board.nextStep()
-		saveState(board, i)
+		#saveState(board, i)
 		x, y = board.vectAlive()
 		line.set_data(x, y)
 		return line,

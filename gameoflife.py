@@ -9,8 +9,8 @@ from trace import trace
 # Parameters
 nbr_lin = 50
 nbr_col = 50
-steps = 1000
-rules = 'simple'
+steps   = 1000
+rules   = 'simple'
 
 
 if __name__ == "__main__":
